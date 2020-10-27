@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Directories</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <ul class="breadcrumb mt-3 mb-0">
+        <li class="breadcrumb-item active">Directories</li>
+    </ul>
+    <div class="row mb-5">
+        <th:block th:each="directory : ${directories}">
+            <div class="col-xl-3 col-md-6 mt-4">
+                <div class="card text-center">
+                    <div class="card-body">
+                        <img th:src="@{images/directory.png}" alt="Directory" src="#"/>
+                        <p class="card-title" th:text="${directory.name}"></p>
+                        <a th:href="@{'directory/'+${directory.id}}" class="stretched-link hide"></a>
+                    </div>
+                </div>
+            </div>
+        </th:block>
+    </div>
+    <button type="button" class="btn btn-success p-md-4 p-3" id="floatBtn" title="Delete directory" data-toggle="modal"
+            data-target="#addDirectoryModal">
+        <img th:src="@{images/add_directory.png}" alt="Add directory" src="#"/>
+    </button>
+    <div class="modal" id="addDirectoryModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Adding directory</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="addDirectory" class="was-validated" action="#" th:action="@{directory/add}"
+                          th:object="${directory}" method="post">
+                        <div class="form-group">
+                            <label for="name">Name:</label>
+                            <input type="text" class="form-control"
+                                   placeholder="Enter directory name" id="name"
+                                   required th:field="*{name}">
+                            <div class="valid-feedback">Nice name.</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" form="addDirectory">Add</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

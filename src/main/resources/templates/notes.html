@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <title>Directory</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="../static/css/style.css" th:href="@{/css/style.css}" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <ul class="breadcrumb mt-3 mb-0">
+        <li class="breadcrumb-item"><a th:href="@{/directory}">Directories</a></li>
+        <th:block th:if="${directory.name.trim()==''}">
+            <li class="breadcrumb-item active">Directory</li>
+        </th:block>
+        <th:block th:unless="${directory.name.trim()==''}">
+            <li class="breadcrumb-item active" th:text="${directory.getName()}"></li>
+        </th:block>
+    </ul>
+
+    <div class="row">
+        <div class="col-md-6 mt-4">
+            <button type="button" class="btn btn-primary btn-block"
+                    data-toggle="modal" data-target="#editDirectoryModal">Edit directory
+            </button>
+        </div>
+        <div class="col-md-6 mt-4">
+            <button type="button" class="btn btn-danger btn-block"
+                    data-toggle="modal" data-target="#deleteDirectoryModal">Delete directory
+            </button>
+        </div>
+    </div>
+
+    <div class="row mb-5">
+        <th:block th:each="note : ${notes}">
+            <div class="col-xl-4 col-md-6 mt-4">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${note.title}"></h5>
+                        <p class="card-text" th:text="${note.text}"></p>
+                        <a th:href="@{'/directory/'+${directory.id}+'/note/'+${note.id}}" href="#"
+                           class="stretched-link hide"></a>
+                    </div>
+                </div>
+            </div>
+        </th:block>
+    </div>
+
+    <button type="button" class="btn btn-success p-md-4 p-3" id="floatBtn" title="Add note" data-toggle="modal"
+            data-target="#addNoteModal">
+        <img th:src="@{/images/add_note.png}" alt="Add note" src="#"/>
+    </button>
+
+    <div class="modal" id="addNoteModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Adding note</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="addNote" class="was-validated" action="#"
+                          th:action="@{${directory.id}+'/note/add'}"
+                          th:object="${note}" method="post">
+                        <div class="form-group">
+                            <label for="title">Title:</label>
+                            <input type="text" class="form-control"
+                                   placeholder="Enter note title" id="title"
+                                   th:field="*{title}">
+
+                        </div>
+                        <div class="form-group">
+                            <label for="text">Text:</label>
+                            <textarea class="form-control" rows="5"
+                                      placeholder="Enter note text" id="text"
+                                      required th:field="*{text}"></textarea>
+                            <div class="valid-feedback">Valid.</div>
+                            <div class="invalid-feedback">Please fill out this field.</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" form="addNote">Add</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="deleteDirectoryModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Deleting directory</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p th:text="${'Are You really want to delete '+directory.name+' directory?'}"></p>
+                </div>
+                <div class="modal-footer">
+                    <form id="deleteDirectory" action="#"
+                          th:action="@{'/directory/'+${directory.id}+'/delete'}" method="post">
+                        <button type="submit" class="btn btn-success" form="deleteDirectory">Yes</button>
+                    </form>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="editDirectoryModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Editing directory</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="editDirectory" action="#" th:action="@{'/directory/'+${directory.id}+'/update'}"
+                          th:object="${directory}" method="post">
+                        <div class="form-group">
+                            <label for="newName">New name:</label>
+                            <input type="text" class="form-control" th:value="${directory.name}"
+                                   placeholder="Enter directory new name" id="newName"
+                                   required th:field="*{name}">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success" form="editDirectory">Apply</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
