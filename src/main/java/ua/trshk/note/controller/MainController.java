@@ -16,7 +16,6 @@ public class MainController {
     private final DirectoryService directoryService;
     private final NoteService noteService;
 
-    @Autowired
     public MainController(DirectoryService directoryService, NoteService noteService) {
         this.directoryService = directoryService;
         this.noteService = noteService;

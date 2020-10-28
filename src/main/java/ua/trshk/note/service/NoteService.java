@@ -13,7 +13,6 @@ public class NoteService {
 
     private final NoteRepository noteRepository;
 
-    @Autowired
     public NoteService(NoteRepository noteRepository) {
         this.noteRepository = noteRepository;
     }

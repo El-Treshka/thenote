@@ -13,7 +13,6 @@ public class DirectoryService {
 
     private final DirectoryRepository directoryRepository;
 
-    @Autowired
     public DirectoryService(DirectoryRepository directoryRepository) {
         this.directoryRepository = directoryRepository;
     }
