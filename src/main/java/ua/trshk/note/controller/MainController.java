@@ -1,9 +1,11 @@
 package ua.trshk.note.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import ua.trshk.note.entity.Directory;
 import ua.trshk.note.entity.Note;
 import ua.trshk.note.service.DirectoryService;
@@ -57,80 +59,63 @@ public class MainController {
     }
 
     @PostMapping("/directory/add")
-    public String createDirectory(@ModelAttribute Directory directory, Model model) {
-        String status = "not added";
+    public String createDirectory(@ModelAttribute Directory directory) {
         if (directory != null && directory.getName() != null) {
             directoryService.add(directory);
-            status = "added";
         }
-        model.addAttribute("status", status);
         return "redirect:/directory";
     }
 
     @PostMapping("/directory/{id}/delete")
-    public String deleteDirectory(@PathVariable Integer id, Model model) {
-        String status = "not deleted";
+    public String deleteDirectory(@PathVariable Integer id) {
         Directory directory = directoryService.findById(id);
         if (directory != null) {
-            status = "deleted";
             directoryService.delete(directory);
         }
-        model.addAttribute("status", status);
         return "redirect:/directory";
     }
 
     @PostMapping("/directory/{id}/update")
     public String updateDirectory(@PathVariable Integer id,
-                                  @ModelAttribute Directory directory, Model model) {
-        String status = "not updated";
+                                  @ModelAttribute Directory directory) {
         if (directory != null && directory.getName() != null &&
                 directory.getId() != null && directoryService.existsById(directory.getId()) &&
                 directory.getId().equals(id)) {
-            status = "updated";
             directoryService.update(directory);
         }
-        model.addAttribute("status", status);
         return "redirect:/directory/" + id;
     }
 
     @PostMapping("/directory/{id}/note/add")
     public String createNote(@PathVariable Integer id,
-                             @ModelAttribute Note note, Model model) {
-        String status = "not added";
+                             @ModelAttribute Note note) {
         if (note != null && note.getText() != null) {
             note.setDirectory(directoryService.findById(id));
             noteService.add(note);
-            status = "added";
         }
-        model.addAttribute("status", status);
         return "redirect:/directory/" + id;
     }
 
     @PostMapping("/directory/{directoryId}/note/{id}/delete")
-    public String deleteNote(@PathVariable Integer id, Model model,
+    public String deleteNote(@PathVariable Integer id,
                              @PathVariable Integer directoryId) {
         if (noteService.existById(id)) {
             noteService.deleteById(id);
-            model.addAttribute("status", "deleted");
             return "redirect:/directory/" + directoryId;
         }
-        model.addAttribute("status", "not deleted");
         return String.format("redirect:/directory/%s/note/%s", directoryId, id);
     }
 
     @PostMapping("/directory/{directoryId}/note/{id}/update")
     public String updateNote(@PathVariable Integer id,
                              @ModelAttribute Note note,
-                             Model model, @PathVariable Integer directoryId) {
-        String status = "not updated";
+                             @PathVariable Integer directoryId) {
         if (note != null && note.getText() != null && note.getId() != null &&
                 note.getId().equals(id) && noteService.existById(id) &&
                 directoryService.existsById(directoryId)) {
             note.setDirectory(directoryService.findById(directoryId));
             noteService.update(note);
-            status = "updated";
         }
-        model.addAttribute("status", status);
         return String.format("redirect:/directory/%s/note/%s", directoryId, id);
     }
 }
