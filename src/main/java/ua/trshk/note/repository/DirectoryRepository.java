@@ -8,7 +8,11 @@ import java.util.List;
 public interface DirectoryRepository extends CrudRepository<Directory, Integer> {
     List<Directory> findAll();
 
+    void deleteById(Integer integer);
+
     boolean existsById(Integer id);
+
+    Directory save(Directory directory);
 
     Directory findDirectoryById(Integer id);
 

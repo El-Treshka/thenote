@@ -18,6 +18,11 @@ public class DirectoryService {
     }
 
     @Transactional
+    public void deleteById(Integer id){
+        directoryRepository.deleteById(id);
+    }
+
+    @Transactional
     public Directory findById(Integer id) {
         return directoryRepository.findDirectoryById(id);
     }
@@ -33,8 +38,8 @@ public class DirectoryService {
     }
 
     @Transactional
-    public void add(Directory directory) {
-        directoryRepository.save(directory);
+    public Directory add(Directory directory) {
+        return directoryRepository.save(directory);
     }
 
     @Transactional

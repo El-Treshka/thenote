@@ -16,7 +16,7 @@ public class Note implements Serializable {
     private Integer id;
 
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "directory_id", referencedColumnName = "id", nullable = false)
     private Directory directory;
 
