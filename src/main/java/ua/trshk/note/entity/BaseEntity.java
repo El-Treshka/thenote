@@ -2,9 +2,7 @@ package ua.trshk.note.entity;
 
 import lombok.*;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
 import java.io.Serializable;
 
 @MappedSuperclass
@@ -14,6 +12,7 @@ import java.io.Serializable;
 @AllArgsConstructor
 public abstract class BaseEntity implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, insertable = false)
     Integer id;
 }
