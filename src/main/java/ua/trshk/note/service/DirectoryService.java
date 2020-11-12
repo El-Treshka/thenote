@@ -1,30 +1,34 @@
 package ua.trshk.note.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ua.trshk.note.component.DirectoryMapper;
+import ua.trshk.note.dto.DirectoryDTO;
 import ua.trshk.note.entity.Directory;
 import ua.trshk.note.repository.DirectoryRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class DirectoryService {
 
     private final DirectoryRepository directoryRepository;
+    private final DirectoryMapper mapper;
 
-    public DirectoryService(DirectoryRepository directoryRepository) {
+    public DirectoryService(DirectoryRepository directoryRepository, DirectoryMapper directoryMapper) {
         this.directoryRepository = directoryRepository;
+        this.mapper = directoryMapper;
     }
 
     @Transactional
-    public void deleteById(Integer id){
+    public void deleteById(Integer id) {
         directoryRepository.deleteById(id);
     }
 
     @Transactional
-    public Directory findById(Integer id) {
-        return directoryRepository.findDirectoryById(id);
+    public DirectoryDTO findById(Integer id) {
+        return mapper.toDto(directoryRepository.findDirectoryById(id));
     }
 
     @Transactional
@@ -33,23 +37,26 @@ public class DirectoryService {
     }
 
     @Transactional
-    public List<Directory> findAll() {
-        return directoryRepository.findAll();
+    public List<DirectoryDTO> findAll() {
+        List<DirectoryDTO> list = new ArrayList<>();
+        for (Directory directory : directoryRepository.findAll())
+            list.add(mapper.toDto(directory));
+        return list;
     }
 
     @Transactional
-    public Directory add(Directory directory) {
-        return directoryRepository.save(directory);
+    public DirectoryDTO add(DirectoryDTO directory) {
+        return mapper.toDto(directoryRepository.save(mapper.toEntity(directory)));
     }
 
     @Transactional
-    public void update(Directory directory) {
-        directoryRepository.save(directory);
+    public void update(DirectoryDTO directory) {
+        directoryRepository.save(mapper.toEntity(directory));
     }
 
     @Transactional
-    public void delete(Directory directory) {
-        directoryRepository.delete(directory);
+    public void delete(DirectoryDTO directory) {
+        directoryRepository.delete(mapper.toEntity(directory));
     }
 
 }
