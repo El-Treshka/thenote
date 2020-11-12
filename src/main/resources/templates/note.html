@@ -19,7 +19,7 @@
         </th:block>
         <th:block th:unless="${directory.name.trim()==''}">
             <li class="breadcrumb-item"><a th:href="@{'/directory/'+${directory.id}}"
-                                           th:text="${directory.name}"></a></li>
+                                           th:text="${note.directory.name}"></a></li>
         </th:block>
         <th:block th:if="${note.title==null || note.title.trim()==''}">
             <li class="breadcrumb-item active">Note</li>

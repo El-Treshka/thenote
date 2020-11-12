@@ -2,8 +2,8 @@ package ua.trshk.note.controller.api;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ua.trshk.note.entity.Directory;
-import ua.trshk.note.entity.Note;
+import ua.trshk.note.dto.DirectoryDTO;
+import ua.trshk.note.dto.NoteDTO;
 import ua.trshk.note.service.DirectoryService;
 import ua.trshk.note.service.NoteService;
 
@@ -23,16 +23,16 @@ public class APIMainController {
 
     @GetMapping("/directories")
     public ResponseEntity<?> viewDirectories() {
-        List<Directory> directories = directoryService.findAll();
+        List<DirectoryDTO> directories = directoryService.findAll();
         if (directories.isEmpty())
             return ResponseEntity.noContent().build();
         return ResponseEntity.ok(directories);
     }
 
     @PostMapping("/directories")
-    public ResponseEntity<?> createDirectory(@RequestBody Directory directory) {
+    public ResponseEntity<?> createDirectory(@RequestBody DirectoryDTO directory) {
         if (directory != null && directory.getName() != null) {
-            Directory addedDirectory = directoryService.add(directory);
+            DirectoryDTO addedDirectory = directoryService.add(directory);
             return ResponseEntity.ok(addedDirectory);
         }
         return ResponseEntity.badRequest().build();
@@ -40,7 +40,7 @@ public class APIMainController {
 
     @PatchMapping("/directories/{directoryId}")
     public ResponseEntity<?> updateDirectory(@PathVariable Integer directoryId,
-                                             @RequestBody Directory directory) {
+                                             @RequestBody DirectoryDTO directory) {
         if (directoryService.existsById(directoryId)
                 && directory != null
                 && directory.getName() != null) {
@@ -63,7 +63,7 @@ public class APIMainController {
     @GetMapping("/directories/{directoryId}/notes")
     public ResponseEntity<?> viewNotes(@PathVariable Integer directoryId) {
         if (directoryService.existsById(directoryId)) {
-            List<Note> notes = noteService.findByDirectoryId(directoryId);
+            List<NoteDTO> notes = noteService.findByDirectoryId(directoryId);
             if (notes.isEmpty())
                 return ResponseEntity.noContent().build();
             return ResponseEntity.ok(notes);
@@ -73,7 +73,7 @@ public class APIMainController {
 
     @PostMapping("/directories/{directoryId}/notes")
     public ResponseEntity<?> createNote(@PathVariable Integer directoryId,
-                                        @RequestBody Note note) {
+                                        @RequestBody NoteDTO note) {
         if (directoryService.existsById(directoryId)
                 && note != null
                 && note.getText() != null) {
@@ -87,7 +87,7 @@ public class APIMainController {
     @PatchMapping("/directories/{directoryId}/notes/{noteId}")
     public ResponseEntity<?> updateNote(@PathVariable Integer directoryId,
                                         @PathVariable Integer noteId,
-                                        @RequestBody Note note) {
+                                        @RequestBody NoteDTO note) {
         if (directoryService.existsById(directoryId)
                 && noteService.existById(noteId)
                 && note != null

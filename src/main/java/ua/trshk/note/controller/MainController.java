@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import ua.trshk.note.entity.Directory;
-import ua.trshk.note.entity.Note;
+import ua.trshk.note.dto.DirectoryDTO;
+import ua.trshk.note.dto.NoteDTO;
 import ua.trshk.note.service.DirectoryService;
 import ua.trshk.note.service.NoteService;
 
@@ -31,7 +31,7 @@ public class MainController {
     @GetMapping("/directory")
     public String viewDirectories(Model model) {
         model.addAttribute("directories", directoryService.findAll());
-        model.addAttribute("directory", new Directory());
+        model.addAttribute("directory", new DirectoryDTO());
         return "directory";
     }
 
@@ -39,9 +39,9 @@ public class MainController {
     public String viewNotes(@PathVariable Integer id, Model model) {
         if (!directoryService.existsById(id))
             return "redirect:/directory";
-        List<Note> notes = noteService.findByDirectoryId(id);
+        List<NoteDTO> notes = noteService.findByDirectoryId(id);
         model.addAttribute("notes", notes);
-        model.addAttribute("note", new Note());
+        model.addAttribute("note", new NoteDTO());
         model.addAttribute("directory", directoryService.findById(id));
         return "notes";
     }
@@ -51,15 +51,14 @@ public class MainController {
                            @PathVariable Integer id, Model model) {
         if (!noteService.existById(id))
             return "redirect:/directory/" + directoryId;
-        Note note = noteService.findById(id);
+        NoteDTO note = noteService.findById(id);
         model.addAttribute("note", note);
-        model.addAttribute("directory", note.getDirectory());
         return "note";
 
     }
 
     @PostMapping("/directory/add")
-    public String createDirectory(@ModelAttribute Directory directory) {
+    public String createDirectory(@ModelAttribute DirectoryDTO directory) {
         if (directory != null && directory.getName() != null) {
             directoryService.add(directory);
         }
@@ -68,7 +67,7 @@ public class MainController {
 
     @PostMapping("/directory/{id}/delete")
     public String deleteDirectory(@PathVariable Integer id) {
-        Directory directory = directoryService.findById(id);
+        DirectoryDTO directory = directoryService.findById(id);
         if (directory != null) {
             directoryService.delete(directory);
         }
@@ -77,7 +76,7 @@ public class MainController {
 
     @PostMapping("/directory/{id}/update")
     public String updateDirectory(@PathVariable Integer id,
-                                  @ModelAttribute Directory directory) {
+                                  @ModelAttribute DirectoryDTO directory) {
         if (directory != null && directory.getName() != null &&
                 directory.getId() != null && directoryService.existsById(directory.getId()) &&
                 directory.getId().equals(id)) {
@@ -88,7 +87,7 @@ public class MainController {
 
     @PostMapping("/directory/{id}/note/add")
     public String createNote(@PathVariable Integer id,
-                             @ModelAttribute Note note) {
+                             @ModelAttribute NoteDTO note) {
         if (note != null && note.getText() != null) {
             note.setDirectory(directoryService.findById(id));
             noteService.add(note);
@@ -108,7 +107,7 @@ public class MainController {
 
     @PostMapping("/directory/{directoryId}/note/{id}/update")
     public String updateNote(@PathVariable Integer id,
-                             @ModelAttribute Note note,
+                             @ModelAttribute NoteDTO note,
                              @PathVariable Integer directoryId) {
         if (note != null && note.getText() != null && note.getId() != null &&
                 note.getId().equals(id) && noteService.existById(id) &&
