@@ -1,19 +1,17 @@
 package ua.trshk.note.entity;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
 @Table(name = "directory")
+@EqualsAndHashCode(callSuper = false)
 @Data
-public class Directory implements Serializable {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, insertable = false)
-    private Integer id;
+@NoArgsConstructor
+@AllArgsConstructor
+public class Directory extends BaseEntity {
 
     @Column(name = "name", nullable = false)
     private String name;
