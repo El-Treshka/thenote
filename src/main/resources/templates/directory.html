@@ -20,7 +20,7 @@
             <div class="col-xl-3 col-md-6 mt-4">
                 <div class="card text-center">
                     <div class="card-body">
-                        <img th:src="@{images/directory.png}" alt="Directory" src="#"/>
+                        <img th:src="@{/images/directory.png}" alt="Directory" src="#"/>
                         <p class="card-title" th:text="${directory.name}"></p>
                         <a th:href="@{'directory/'+${directory.id}}" class="stretched-link hide"></a>
                     </div>
@@ -30,7 +30,7 @@
     </div>
     <button type="button" class="btn btn-success p-md-4 p-3" id="floatBtn" title="Delete directory" data-toggle="modal"
             data-target="#addDirectoryModal">
-        <img th:src="@{images/add_directory.png}" alt="Add directory" src="#"/>
+        <img th:src="@{/images/add_directory.png}" alt="Add directory" src="#"/>
     </button>
     <div class="modal" id="addDirectoryModal">
         <div class="modal-dialog">

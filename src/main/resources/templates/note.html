@@ -13,12 +13,12 @@
 
 <div class="container">
     <ul class="breadcrumb mt-3 mb-0">
-        <li class="breadcrumb-item"><a th:href="@{/directory}">Directories</a></li>
+        <li class="breadcrumb-item"><a th:href="@{/web/directory}">Directories</a></li>
         <th:block th:if="${note.directory.name.trim()==''}">
-            <li class="breadcrumb-item "><a th:href="@{'/directory/'+${note.directory.id}}">Directory</a></li>
+            <li class="breadcrumb-item "><a th:href="@{'/web/directory/'+${note.directory.id}}">Directory</a></li>
         </th:block>
         <th:block th:unless="${note.directory.name.trim()==''}">
-            <li class="breadcrumb-item"><a th:href="@{'/directory/'+${note.directory.id}}"
+            <li class="breadcrumb-item"><a th:href="@{'/web/directory/'+${note.directory.id}}"
                                            th:text="${note.directory.name}"></a></li>
         </th:block>
         <th:block th:if="${note.title==null || note.title.trim()==''}">
@@ -46,7 +46,7 @@
                         </div>
                         <div class="col-md-6 mt-4">
                             <form id="deleteNote" action="#"
-                                  th:action="@{'/directory/'+${note.directory.id}+'/note/'+${note.id}+'/delete'}"
+                                  th:action="@{'/web/directory/'+${note.directory.id}+'/note/'+${note.id}+'/delete'}"
                                   method="post">
                                 <button type="submit" class="btn btn-danger btn-block" form="deleteNote">Delete</button>
                             </form>
@@ -67,7 +67,7 @@
                 </div>
                 <div class="modal-body">
                     <form id="editNote" class="was-validated" action="#"
-                          th:action="@{'/directory/'+${note.directory.id}+'/note/'+${note.id}+'/update'}"
+                          th:action="@{'/web/directory/'+${note.directory.id}+'/note/'+${note.id}+'/update'}"
                           th:object="${note}" method="post">
                         <div class="form-group">
                             <label for="title">Title:</label>

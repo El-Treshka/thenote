@@ -2,10 +2,7 @@ package ua.trshk.note.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 import ua.trshk.note.dto.DirectoryDTO;
 import ua.trshk.note.dto.NoteDTO;
 import ua.trshk.note.service.DirectoryService;
@@ -14,6 +11,7 @@ import ua.trshk.note.service.NoteService;
 import java.util.List;
 
 @Controller
+@RequestMapping("/web")
 public class MainController {
     private final DirectoryService directoryService;
     private final NoteService noteService;
@@ -25,7 +23,7 @@ public class MainController {
 
     @GetMapping("/")
     public String redirect() {
-        return "redirect:/directory";
+        return "redirect:/web/directory";
     }
 
     @GetMapping("/directory")
@@ -38,7 +36,7 @@ public class MainController {
     @GetMapping("/directory/{id}")
     public String viewNotes(@PathVariable Integer id, Model model) {
         if (!directoryService.existsById(id))
-            return "redirect:/directory";
+            return "redirect:/web/directory";
         List<NoteDTO> notes = noteService.findByDirectoryId(id);
         model.addAttribute("notes", notes);
         model.addAttribute("note", new NoteDTO());
@@ -50,7 +48,7 @@ public class MainController {
     public String viewNote(@PathVariable Integer directoryId,
                            @PathVariable Integer id, Model model) {
         if (!noteService.existById(id))
-            return "redirect:/directory/" + directoryId;
+            return "redirect:/web/directory/" + directoryId;
         NoteDTO note = noteService.findById(id);
         model.addAttribute("note", note);
         return "note";
@@ -62,7 +60,7 @@ public class MainController {
         if (directory != null && directory.getName() != null) {
             directoryService.add(directory);
         }
-        return "redirect:/directory";
+        return "redirect:/web/directory";
     }
 
     @PostMapping("/directory/{id}/delete")
@@ -71,7 +69,7 @@ public class MainController {
         if (directory != null) {
             directoryService.delete(directory);
         }
-        return "redirect:/directory";
+        return "redirect:/web/directory";
     }
 
     @PostMapping("/directory/{id}/update")
@@ -82,7 +80,7 @@ public class MainController {
                 directory.getId().equals(id)) {
             directoryService.update(directory);
         }
-        return "redirect:/directory/" + id;
+        return "redirect:/web/directory/" + id;
     }
 
     @PostMapping("/directory/{id}/note/add")
@@ -92,7 +90,7 @@ public class MainController {
             note.setDirectory(directoryService.findById(id));
             noteService.add(note);
         }
-        return "redirect:/directory/" + id;
+        return "redirect:/web/directory/" + id;
     }
 
     @PostMapping("/directory/{directoryId}/note/{id}/delete")
@@ -100,9 +98,9 @@ public class MainController {
                              @PathVariable Integer directoryId) {
         if (noteService.existById(id)) {
             noteService.deleteById(id);
-            return "redirect:/directory/" + directoryId;
+            return "redirect:/web/directory/" + directoryId;
         }
-        return String.format("redirect:/directory/%s/note/%s", directoryId, id);
+        return String.format("redirect:/web/directory/%s/note/%s", directoryId, id);
     }
 
     @PostMapping("/directory/{directoryId}/note/{id}/update")
@@ -115,6 +113,6 @@ public class MainController {
             note.setDirectory(directoryService.findById(directoryId));
             noteService.update(note);
         }
-        return String.format("redirect:/directory/%s/note/%s", directoryId, id);
+        return String.format("redirect:/web/directory/%s/note/%s", directoryId, id);
     }
 }
