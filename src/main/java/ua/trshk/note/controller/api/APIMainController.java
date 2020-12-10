@@ -29,6 +29,10 @@ public class APIMainController {
         return ResponseEntity.ok(directories);
     }
 
+    @PostMapping("/authenticate")
+    public void authenticateUser(@RequestParam String username, @RequestParam String password){
+    }
+
     @PostMapping("/directories")
     public ResponseEntity<?> createDirectory(@RequestBody DirectoryDTO directory) {
         if (directory != null && directory.getName() != null) {
